@@ -6,14 +6,10 @@ import { Provider } from "react-redux";
 import store from "./store/store";
 import { NavigationContainer, useRoute } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import SearchScreen from "./screens/search/searchScreenTab";
 import LoginScreen from "./screens/loginScreen";
-import Alert from "./components/ui/alert";
-import BottomNavbar from "./components/nav/navigation";
-import CartScreen from "./screens/cartScreen";
-import SingleItem from "./screens/singleItem";
-import CheckoutScreen from "./screens/checkoutScreen";
-import AddAddress from "./screens/addAddress";
+import Alert from "./components/alert";
+import HomeTabs from "./components/nav/nav";
+import Newitem from "./screens/newitem";
 
 const Stack = createStackNavigator();
 
@@ -22,19 +18,15 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="HomeTab"
+          // initialRouteName=""
           screenOptions={{ headerShown: false, backgroundColor: "white" }}
         >
-          <Stack.Screen component={BottomNavbar} name="HomeTab" />
-          <Stack.Screen component={SearchScreen} name="SearchTab" />
           <Stack.Screen component={LoginScreen} name="Login" />
-          <Stack.Screen component={CartScreen} name="Cart" />
-          <Stack.Screen component={CheckoutScreen} name="Checkout" />
-          <Stack.Screen component={SingleItem} name="SingleItem" />
-          <Stack.Screen component={AddAddress} name="AddAddress" />
+          <Stack.Screen component={HomeTabs} name="HomeTabs" />
+          <Stack.Screen component={Newitem} name="NewItem" />
         </Stack.Navigator>
-        <Alert />
       </NavigationContainer>
+      <Alert />
     </Provider>
   );
 }

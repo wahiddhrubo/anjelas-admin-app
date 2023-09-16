@@ -1,4 +1,3 @@
-import { View } from "moti";
 import React from "react";
 import {
   Image,
@@ -11,32 +10,33 @@ import {
   TextInput,
   TouchableWithoutFeedback,
 } from "react-native";
-import { primaryColor } from "../lib/constant";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { LOGIN } from "../store/saga/actions";
 import { useEffect } from "react";
-import { getUser } from "../store/selectors";
 
 import { Feather, Ionicons } from "@expo/vector-icons";
+import { getUser } from "../store/selectors";
+import { useNavigation } from "@react-navigation/native";
+import { View } from "react-native";
 
-export default function Login({ navigation }) {
+export default function Login({}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigation = useNavigation();
   const [showpassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const { user } = useSelector(getUser);
   const loginHandler = () => {
+    console.log("pressed");
     dispatch({ type: LOGIN, email, password });
   };
+
   useEffect(() => {
     if (user) {
-      navigation.goBack();
+      navigation.navigate("HomeTabs");
     }
   }, [user]);
-  const goBackHandler = () => {
-    navigation.goBack();
-  };
 
   return (
     <TouchableWithoutFeedback
@@ -44,16 +44,6 @@ export default function Login({ navigation }) {
       onPress={() => Keyboard.dismiss()}
     >
       <View style={style.container}>
-        <Pressable style={style.goBackBtn} onPress={goBackHandler}>
-          <View>
-            <Feather
-              name="chevron-left"
-              style={{ marginHorizontal: 8 }}
-              size={32}
-              color="black"
-            />
-          </View>
-        </Pressable>
         <Pressable onPress={() => navigation.navigate("HomeTab")}>
           <Image
             resizeMode="contain"
@@ -81,7 +71,7 @@ export default function Login({ navigation }) {
               name={showpassword ? "eye-off" : "eye"}
               size={24}
               style={style.passwordBtn}
-              color={showpassword ? primaryColor : "black"}
+              color={showpassword ? "purple" : "black"}
             />
           </Pressable>
         </View>
@@ -112,14 +102,14 @@ const style = StyleSheet.create({
     borderRadius: 4,
     padding: 12,
     marginVertical: 12,
-    borderColor: primaryColor,
+    borderColor: "purple",
     width: "100%",
     borderWidth: 1,
   },
   btn: {
     marginTop: 16,
     borderRadius: 4,
-    backgroundColor: primaryColor,
+    backgroundColor: "purple",
     width: "100%",
     justifyContent: "center",
     padding: 16,
@@ -138,7 +128,6 @@ const style = StyleSheet.create({
     left: 12,
     width: 55,
     height: 55,
-    // backgroundColor: "#8080801a",
     borderRadius: 500,
   },
   passwordInput: {
@@ -147,7 +136,7 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     borderWidth: 1,
-    borderColor: primaryColor,
+    borderColor: "purple",
     borderRadius: 4,
   },
 

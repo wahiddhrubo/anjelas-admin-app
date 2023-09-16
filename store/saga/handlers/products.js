@@ -1,81 +1,28 @@
-import { PRODUCTS_FAIL, PRODUCTS_SUCCESS } from "../actions";
 import { put, call, all } from "redux-saga/effects";
 import { axiosCall } from "../call";
 import {
-  productSuccess,
   productFail,
-  latestProductSuccess,
   productLoader,
   searchLoader,
   homeProductSuccess,
-  categoryProductSuccess,
   searchProductSuccess,
 } from "../../slice/products";
-import {
-  singleProductLoading,
-  singleProductSuccess,
-  singleproductFail,
-} from "../../slice/singleProduct";
+
 import { BACKEND_URL } from "../../../lib/config";
+import { sucessAlert } from "../../slice/alert";
+import { addSingleProductSuccess } from "../../slice/singleProduct";
 
 export function* fetchHomeProducts(action) {
   yield put(productLoader());
 
-  const itemPerPage = 8;
+  const itemPerPage = 80;
   const baseUrl = `${BACKEND_URL}/api/v1/items?itemPerPage=${itemPerPage}`;
 
   try {
-    const fetchLatestUrl = `${baseUrl}`;
-    const fetchByPriceUrl = `${baseUrl}&sortBy=skus.price`;
-    const fetchByReviewUrl = `${baseUrl}&sortBy=reviews.rating`;
-    const fetchMostLovedUrl = `${baseUrl}&categories=Favourites!`;
-    const fetchDawatUrl = `${baseUrl}&categories=Dawat`;
-
-    const {
-      latestItems,
-      bestValueItems,
-      highestRatedItems,
-      mostLovedItems,
-      DawatItems,
-    } = yield all({
-      latestItems: call(() =>
-        axiosCall({ url: fetchLatestUrl, method: "get" })
-      ),
-      bestValueItems: call(() =>
-        axiosCall({ url: fetchByPriceUrl, method: "get" })
-      ),
-      highestRatedItems: call(() =>
-        axiosCall({ url: fetchByReviewUrl, method: "get" })
-      ),
-      mostLovedItems: call(() =>
-        axiosCall({ url: fetchMostLovedUrl, method: "get" })
-      ),
-      DawatItems: call(() => axiosCall({ url: fetchDawatUrl, method: "get" })),
-    });
-
-    const homeProducts = [
-      {
-        title: "Latest",
-        data: latestItems.data.items[0].data,
-      },
-      {
-        title: "Best value",
-        data: bestValueItems.data.items[0].data,
-      },
-      {
-        title: "Highest Rated",
-        data: highestRatedItems.data.items[0].data,
-      },
-      {
-        title: "Most Loved ",
-        data: mostLovedItems.data.items[0].data,
-      },
-      {
-        title: "Enjoy with guest",
-        data: DawatItems.data.items[0],
-      },
-    ];
-
+    const { data } = yield call(() =>
+      axiosCall({ url: baseUrl, method: "get" })
+    );
+    const { data: homeProducts } = data.items[0];
     yield put(
       homeProductSuccess({
         homeProducts,
@@ -86,19 +33,94 @@ export function* fetchHomeProducts(action) {
     yield put(productFail(error));
   }
 }
-export function* fetchCategoryProducts(action) {
-  yield put(productLoader());
+// export function* updateProducts(action) {
+//   yield put(productLoader());
 
-  const { category } = action;
-  const itemPerPage = 100;
-  const fetchUrl = `${BACKEND_URL}/api/v1/items?itemPerPage=${itemPerPage}&categories=${category}`;
+//   const { category } = action;
+//   const itemPerPage = 100;
+//   const fetchUrl = `${BACKEND_URL}/api/v1/items?itemPerPage=${itemPerPage}&categories=${category}`;
+
+//   try {
+//     const { data } = yield call(() =>
+//       axiosCall({ url: fetchUrl, method: "get" })
+//     );
+//     const { data: items } = data.items[0];
+//     yield put(categoryProductSuccess({ items }));
+//   } catch (error) {
+//     console.log(error);
+//     yield put(productFail(error));
+//   }
+// }
+export function* updateProducts(action) {
+  yield put(productLoader());
+  const {
+    name,
+    description,
+    stock,
+    gallery,
+    featuredImage,
+    categories,
+    tags,
+    skus,
+  } = action;
+  const baseUrl = `${BACKEND_URL}/api/v1/admin/items/new`;
+
+  try {
+    yield call(() =>
+      axiosCall({
+        url: baseUrl,
+        method: "post",
+        data: {
+          name,
+          description,
+          stock,
+          gallery,
+          featuredImage,
+          categories,
+          tags,
+          skus,
+        },
+      })
+    );
+  } catch (error) {
+    console.log(error);
+    yield put(productFail(error));
+  }
+}
+export function* addProduct(action) {
+  yield put(productLoader());
+  const {
+    name,
+    description,
+    stock,
+    gallery,
+    featuredImage,
+    categories,
+    tags,
+    skus,
+  } = action;
+  const baseUrl = `${BACKEND_URL}/api/v1/admin/items/new`;
 
   try {
     const { data } = yield call(() =>
-      axiosCall({ url: fetchUrl, method: "get" })
+      axiosCall({
+        url: baseUrl,
+        method: "post",
+        data: {
+          name,
+          description,
+          stock,
+          gallery,
+          featuredImage,
+          categories,
+          tags,
+          skus,
+        },
+      })
     );
-    const { data: items } = data.items[0];
-    yield put(categoryProductSuccess({ items }));
+    console.log(data);
+    yield put(sucessAlert("Product Added Sucessfully"));
+    yield put(addSingleProductSuccess());
   } catch (error) {
     console.log(error);
     yield put(productFail(error));
@@ -134,9 +156,7 @@ export function* fetchSingleProducts(action) {
   try {
     const result = yield call(() => axiosCall({ url: baseUrl, method: "get" }));
     console.log(result);
-    yield put(singleProductSuccess(result.data));
   } catch (error) {
     console.log(error);
-    yield put(singleproductFail(error));
   }
 }

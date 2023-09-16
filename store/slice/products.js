@@ -19,8 +19,12 @@ const productSlice = createSlice({
       state.numOfProducts = total;
       state.pages = pages;
     },
+    addProductSuccess: (state, action) => {
+      state.loading = false;
+      state.productAddSuccess = true;
+    },
     homeProductSuccess: (state, action) => {
-      const { homeProducts, total, pages } = action.payload;
+      const { homeProducts } = action.payload;
       state.loading = false;
       state.homeProducts = homeProducts;
     },
@@ -50,5 +54,6 @@ export const {
   homeProductSuccess,
   categoryProductSuccess,
   searchProductSuccess,
+  addProductSuccess,
 } = productSlice.actions;
 export default productSlice.reducer;
