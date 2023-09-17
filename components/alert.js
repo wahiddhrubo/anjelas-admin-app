@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { StyleSheet, Text, View } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { useEffect } from "react";
 import { useState } from "react";
 import { getAlert } from "../store/selectors";
@@ -19,7 +19,7 @@ export default function Alert() {
     if (true) {
       interval = setInterval(() => {
         setProgress((progress) => progress + 1);
-      }, 10);
+      }, 20);
     }
   }, [text]);
 
@@ -41,12 +41,16 @@ export default function Alert() {
             ...styles.container,
           }}
         >
-          <MaterialIcons name="error-outline" size={38} color="red" />
+          {type === "error" ? (
+            <MaterialIcons name="error-outline" size={38} color="red" />
+          ) : (
+            <Feather name="check-circle" size={38} color="green" />
+          )}
           <Text style={styles.text}> {text}</Text>
           <View
             style={{
               height: 5,
-              backgroundColor: "red",
+              backgroundColor: type === "error" ? "red" : "green",
               width: `${progress * 1.5}%`,
               position: "absolute",
               left: 0,

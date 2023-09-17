@@ -18,6 +18,10 @@ const singleProductSlice = createSlice({
       state.loading = false;
       state.singleProductAddSuccess = true;
     },
+    deleteSingleProductSuccess: (state, action) => {
+      state.loading = false;
+      state.singleProductDeleteSuccess = true;
+    },
     resetSingleProductAddSuccess: (state, action) => {
       state.loading = false;
       state.singleProductAddSuccess = false;
@@ -45,5 +49,6 @@ export const {
   updateSingleProductSuccess,
   resetSingleProductUpdateSuccess,
   singleProductFail,
+  deleteSingleProductSuccess,
 } = singleProductSlice.actions;
 export default singleProductSlice.reducer;

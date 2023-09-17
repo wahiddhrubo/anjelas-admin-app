@@ -10,7 +10,13 @@ import {
 
 import { BACKEND_URL } from "../../../lib/config";
 import { sucessAlert } from "../../slice/alert";
-import { addSingleProductSuccess } from "../../slice/singleProduct";
+import {
+  addSingleProductSuccess,
+  deleteSingleProductSuccess,
+  singleProductLoader,
+  singleProductSuccess,
+} from "../../slice/singleProduct";
+import { GET_HOME_PRODUCTS } from "../actions";
 
 export function* fetchHomeProducts(action) {
   yield put(productLoader());
@@ -149,13 +155,32 @@ export function* fetchSearchedProducts(action) {
 }
 
 export function* fetchSingleProducts(action) {
-  yield put(singleProductLoading());
+  yield put(singleProductLoader());
   const { id } = action;
   const baseUrl = `${BACKEND_URL}/api/v1/items/${id}`;
 
   try {
-    const result = yield call(() => axiosCall({ url: baseUrl, method: "get" }));
-    console.log(result);
+    const { data } = yield call(() =>
+      axiosCall({ url: baseUrl, method: "get" })
+    );
+    yield put(singleProductSuccess(data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+export function* deleteSingleProduct(action) {
+  yield put(singleProductLoader());
+  const { id } = action;
+  const baseUrl = `${BACKEND_URL}/api/v1/items/${id}`;
+
+  try {
+    const { data } = yield call(() =>
+      axiosCall({ url: baseUrl, method: "delete" })
+    );
+    console.log(data);
+    yield put(deleteSingleProductSuccess(data));
+    yield put({ type: GET_HOME_PRODUCTS });
+    yield put(sucessAlert("Product Delete Sucessfully"));
   } catch (error) {
     console.log(error);
   }

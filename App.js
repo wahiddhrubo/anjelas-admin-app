@@ -10,6 +10,7 @@ import LoginScreen from "./screens/loginScreen";
 import Alert from "./components/alert";
 import HomeTabs from "./components/nav/nav";
 import Newitem from "./screens/newitem";
+import UpdateItem from "./screens/updateItem";
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ export default function App() {
           <Stack.Screen component={LoginScreen} name="Login" />
           <Stack.Screen component={HomeTabs} name="HomeTabs" />
           <Stack.Screen component={Newitem} name="NewItem" />
+          <Stack.Screen component={UpdateItem} name="UpdateItem" />
         </Stack.Navigator>
       </NavigationContainer>
       <Alert />

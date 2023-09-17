@@ -13,7 +13,7 @@ const alertReducer = createSlice({
     sucessAlert: (state, action) => {
       state.id = Math.floor(Math.random() * 500);
       state.type = "sucess";
-      state.text = action.payload.text;
+      state.text = action.payload;
     },
     resetAlert: (state, action) => {
       state.type = "";

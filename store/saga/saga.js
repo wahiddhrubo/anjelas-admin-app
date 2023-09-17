@@ -1,12 +1,14 @@
 import { takeLatest } from "redux-saga/effects";
 import {
   addProduct,
+  deleteSingleProduct,
   fetchHomeProducts,
   fetchSearchedProducts,
   fetchSingleProducts,
 } from "./handlers/products";
 import {
   ADD_PRODUCT,
+  DELETE_SINGLE_PRODUCT,
   FORGOT_PASSWORD,
   GET_COUPON,
   GET_HOME_PRODUCTS,
@@ -37,6 +39,7 @@ export default function* rootSaga() {
   yield takeLatest(GET_SEARCH_PRODUCTS, fetchSearchedProducts);
   yield takeLatest(GET_SINGLE_PRODUCT, fetchSingleProducts);
   yield takeLatest(ADD_PRODUCT, addProduct);
+  yield takeLatest(DELETE_SINGLE_PRODUCT, deleteSingleProduct);
 
   yield takeLatest(LOGIN, login);
   yield takeLatest(LOGOUT, logout);
