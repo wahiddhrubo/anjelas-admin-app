@@ -14,11 +14,13 @@ export function* fetchOrders(action) {
   yield put(orderLoading());
   const { status } = action;
   try {
-    const fetchUrl = `${BACKEND_URL}/api/v1/user/orders/${status || ""}`;
+    const fetchUrl = `${BACKEND_URL}/api/v1/admin/orders/${status || ""}`;
     const { data } = yield call(() =>
       axiosCredentialsCall({ url: fetchUrl, method: "get" })
     );
-    yield put(updateOrders(data));
+    const { orders } = data;
+
+    yield put(updateOrders({ orders }));
   } catch (error) {
     yield put(orderError(error.response.data.message || error.message));
   }
@@ -32,68 +34,9 @@ export function* fetchSingleOrder(action) {
     const { data } = yield call(() =>
       axiosCredentialsCall({ url: fetchUrl, method: "get" })
     );
+    console.log(data);
     yield put(getSingleOrder(data));
   } catch (error) {
     yield put(orderError(error.response.data.message || error.message));
-  }
-}
-export function* createOrder(action) {
-  yield put(orderLoading());
-  const {
-    location,
-    deliveryCharge,
-    tax,
-    subTotal,
-    total,
-    coupon,
-    discount,
-    paymentMethod,
-    deliveryDate,
-    deliveryTime,
-  } = action;
-  const data = {
-    location,
-    deliveryCharge,
-    tax,
-    subTotal,
-    total,
-    coupon,
-    discount,
-    deliveryDate,
-    deliveryTime,
-  };
-  const method = paymentMethod || "";
-  try {
-    const fetchUrl = `${BACKEND_URL}/api/v1/order/${method}`;
-    const result = yield call(() =>
-      axiosCredentialsCall({ url: fetchUrl, method: "post", data })
-    );
-    yield put(orderSucess());
-  } catch (error) {
-    yield put(orderError(error.response.data.message || error.message));
-  }
-}
-
-export function* postReview(action) {
-  const { orderId, itemId, rating, comment } = action;
-  const data = {
-    orderId,
-    itemId,
-    rating,
-    comment,
-  };
-
-  try {
-    const fetchUrl = `${BACKEND_URL}/api/v1/user/review`;
-    const result = yield call(() =>
-      axiosCredentialsCall({
-        url: fetchUrl,
-        method: "post",
-        data,
-      })
-    );
-    yield put(reviewSucess());
-  } catch (error) {
-    console.log(error.response || error.message);
   }
 }

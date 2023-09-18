@@ -22,6 +22,8 @@ import { ADD_PRODUCT } from "../store/saga/actions";
 import { getProducts, getSingleProduct } from "../store/selectors";
 import { useEffect } from "react";
 import { resetSingleProductAddSuccess } from "../store/slice/singleProduct";
+import TagsSelector from "../components/addItems/tagSelector";
+import TagsModal from "../components/addItems/tagsModal";
 
 export default function Newitem({ navigation }) {
   const dispatch = useDispatch();
@@ -29,9 +31,11 @@ export default function Newitem({ navigation }) {
   const [description, setDescription] = useState();
   const [stock, setStock] = useState();
   const [category, setCategory] = useState([]);
+  const [tag, setTag] = useState([]);
   const [featuredImageUri, setFeaturedImageUri] = useState();
   const [galleryImageUris, setGalleryImageUris] = useState([]);
   const [categoryModal, setCategoryModal] = useState();
+  const [tagModal, setTagModal] = useState();
   const [skus, setSkus] = useState([]);
 
   const { singleProductAddSuccess } = useSelector(getSingleProduct);
@@ -73,6 +77,7 @@ export default function Newitem({ navigation }) {
       gallery,
       featuredImage,
       categories: category,
+      tags: tag,
       skus,
     });
   };
@@ -85,6 +90,13 @@ export default function Newitem({ navigation }) {
         modal={categoryModal}
         setModal={setCategoryModal}
       />
+      <TagsModal
+        tag={tag}
+        setTag={setTag}
+        modal={tagModal}
+        setModal={setTagModal}
+      />
+
       <StickyHeader title={"New Item"} />
       <ScrollView style={styles.container}>
         <View style={styles.form}>
@@ -112,6 +124,7 @@ export default function Newitem({ navigation }) {
             setCategory={setCategory}
             setModal={setCategoryModal}
           />
+          <TagsSelector setModal={setTagModal} setTags={setTag} tags={tag} />
           <FeaturedImageUploader
             setFeaturedImageUris={setFeaturedImageUri}
             featuredImageUri={featuredImageUri}
@@ -165,7 +178,7 @@ const styles = StyleSheet.create({
   inputHalf: {
     width: "45%",
     borderWidth: 1,
-    borderColor: primaryColor,
+    borderColor: "purple",
     padding: 8,
     marginVertical: 8,
     backgroundColor: "white",
@@ -173,7 +186,7 @@ const styles = StyleSheet.create({
   inputFull: {
     width: "100%",
     borderWidth: 1,
-    borderColor: primaryColor,
+    borderColor: "purple",
     padding: 8,
     marginVertical: 8,
     backgroundColor: "white",

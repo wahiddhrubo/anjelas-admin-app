@@ -8,16 +8,10 @@ export const DELETE_SINGLE_PRODUCT = "DELETE_SINGLE_PRODUCT";
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 export const LOAD_USER = "LOAD_USER";
+export const LOAD_ALL_USER = "LOAD_ALL_USER";
 export const FORGOT_PASSWORD = "FORGOT_PASSWORD";
 export const REGISTER = "REGISTER";
 export const RESET_PASSWORD = "RESET_PASSWORD";
-export const GET_FAVOURITE = "GET_FAVOURITE";
-export const ADD_FAVOURITE = "ADD_FAVOURITE";
-export const REMOVE_FAVOURITE = "REMOVE_FAVOURITE";
-
-export const GET_LOCATION = "GET_LOCATION";
-export const ADD_LOCATION = "ADD_LOCATION";
-export const DELETE_LOCATION = "DELETE_LOCATION";
 
 export const REMOVE_ITEM_FROM_CART = "REMOVE_ITEM_FROM_CART";
 export const MULTIPLE_UPDATE_CART = "MULTIPLE_UPDATE_CART";
@@ -32,3 +26,4 @@ export const GET_SINGLE_ORDERS = "GET_SINGLE_ORDERS";
 export const POST_REVIEW = "POST_REVIEW";
 
 export const GET_COUPON = "GET_COUPON";
+export const GET_ALL_COUPON = "GET_ALL_COUPON";

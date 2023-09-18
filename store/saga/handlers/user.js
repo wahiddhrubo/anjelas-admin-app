@@ -12,6 +12,7 @@ import {
   addFavouriteNonUser,
   updateFavourite,
   updateLocations,
+  allUsersLoadSuccess,
 } from "../../slice/user";
 import {
   GET_CART,
@@ -25,9 +26,6 @@ import { errorAlert } from "../../slice/alert";
 import { BACKEND_URL } from "../../../lib/config";
 import { updateCart } from "../../slice/cart";
 import useAsyncStorage from "../../../hooks/useAsyncStorage";
-
-const [getStorageFavourites, addStorageFavourites, removeStorageFavourites] =
-  useAsyncStorage("Favourites");
 
 export function* login(action) {
   yield put(userLoading());
@@ -67,6 +65,19 @@ export function* loadUser(action) {
     console.log(error);
   }
 }
+export function* getAllUsers(action) {
+  const { keyword } = action;
+  try {
+    const url = `${BACKEND_URL}/api/v1/admin/users?keyword=${keyword || ""}`;
+
+    const { data } = yield call(() =>
+      axiosCredentialsCall({ url, method: "get" })
+    );
+    yield put(allUsersLoadSuccess(data));
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export function* logout(action) {
   yield put(userLoading());
@@ -85,35 +96,7 @@ export function* logout(action) {
     );
   }
 }
-export function* register(action) {
-  yield put(userLoading());
-  const { email, password, username } = action;
-  const { items } = yield select(getCart);
 
-  try {
-    const url = `${BACKEND_URL}/api/v1/register`;
-
-    const { data } = yield call(() =>
-      axiosCredentialsCall({
-        url,
-        method: "post",
-        data: { email, password, username },
-      })
-    );
-    if (items) {
-      yield put({ type: MULTIPLE_ADD_TO_CART, items });
-    }
-    yield put({ type: GET_CART });
-
-    yield put(loginSuccess(data));
-  } catch (error) {
-    yield put(
-      errorAlert({ text: error.response.data.message || error.message })
-    );
-
-    console.log(error.response.data.message || error.message);
-  }
-}
 export function* forgotPassword(action) {
   yield put(userLoading());
   const { email } = action;

@@ -6,6 +6,7 @@ const initialState = {
   coupon: "",
   total: 0,
   discount: 0,
+  coupons: [],
 };
 
 const couponSlice = createSlice({
@@ -15,6 +16,11 @@ const couponSlice = createSlice({
     couponSucess: (state, action) => {
       state.loading = false;
       state.sucess = true;
+    },
+    allCouponSucess: (state, action) => {
+      state.loading = false;
+      state.sucess = true;
+      state.coupons = action.payload.coupons;
     },
     couponLoading: (state, action) => {
       state.loading = true;
@@ -33,6 +39,11 @@ const couponSlice = createSlice({
   },
 });
 
-export const { couponSucess, couponLoading, couponError, updateCoupon } =
-  couponSlice.actions;
+export const {
+  couponSucess,
+  couponLoading,
+  couponError,
+  updateCoupon,
+  allCouponSucess,
+} = couponSlice.actions;
 export default couponSlice.reducer;

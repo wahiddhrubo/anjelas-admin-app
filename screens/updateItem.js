@@ -27,6 +27,8 @@ import { getProducts, getSingleProduct } from "../store/selectors";
 import { useEffect } from "react";
 import { resetSingleProductAddSuccess } from "../store/slice/singleProduct";
 import { useRoute } from "@react-navigation/native";
+import TagSelector from "../components/updateItems/tagSelector";
+import TagsModal from "../components/updateItems/tagsModal";
 
 export default function UpdateItem({ navigation }) {
   const dispatch = useDispatch();
@@ -41,6 +43,8 @@ export default function UpdateItem({ navigation }) {
   const [featuredImageUri, setFeaturedImageUri] = useState();
   const [galleryImageUris, setGalleryImageUris] = useState([]);
   const [categoryModal, setCategoryModal] = useState();
+  const [tag, setTag] = useState([]);
+  const [tagModal, setTagModal] = useState();
   const [skus, setSkus] = useState([]);
 
   // useEffect(() => {
@@ -63,6 +67,7 @@ export default function UpdateItem({ navigation }) {
       setFeaturedImageUri(item?.featuredImage.url);
       setGalleryImageUris(item?.gallery || []);
       setSkus(item?.skus);
+      setTag(item.tags);
     }
   }, [item]);
 
@@ -110,6 +115,12 @@ export default function UpdateItem({ navigation }) {
             modal={categoryModal}
             setModal={setCategoryModal}
           />
+          <TagsModal
+            tag={tag}
+            setTag={setTag}
+            modal={tagModal}
+            setModal={setTagModal}
+          />
           <StickyHeader title={"New Item"} />
           <ScrollView style={styles.container}>
             <View style={styles.form}>
@@ -141,6 +152,7 @@ export default function UpdateItem({ navigation }) {
                 setCategory={setCategory}
                 setModal={setCategoryModal}
               />
+              <TagSelector tag={tag} setTag={setTag} setModal={setTagModal} />
               <FeaturedImageUploader
                 setFeaturedImageUris={setFeaturedImageUri}
                 featuredImageUri={featuredImageUri}
@@ -200,7 +212,7 @@ const styles = StyleSheet.create({
   inputHalf: {
     width: "45%",
     borderWidth: 1,
-    borderColor: primaryColor,
+    borderColor: "purple",
     padding: 8,
     marginVertical: 8,
     backgroundColor: "white",
@@ -208,7 +220,7 @@ const styles = StyleSheet.create({
   inputFull: {
     width: "100%",
     borderWidth: 1,
-    borderColor: primaryColor,
+    borderColor: "purple",
     padding: 8,
     marginVertical: 8,
     backgroundColor: "white",

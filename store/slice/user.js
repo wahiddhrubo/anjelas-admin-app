@@ -10,6 +10,7 @@ const initialState = {
     area: "",
   },
   locations: [],
+  users: [],
 };
 
 const userSlice = createSlice({
@@ -29,6 +30,11 @@ const userSlice = createSlice({
       state.isAuthenticated = true;
       state.user = action.payload.user;
     },
+    allUsersLoadSuccess: (state, action) => {
+      state.loading = false;
+      state.isAuthenticated = true;
+      state.users = action.payload.users;
+    },
     forgotPasswordSuccess: (state, action) => {
       state.loading = false;
       state.emailSentSuccess = true;
@@ -43,19 +49,6 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
-
-    updateFavourite: (state, action) => {
-      console.log(action.payload);
-      state.favourites = action.payload.favourites;
-      state.loading = false;
-    },
-    updateUserLoc: (state, action) => {
-      state.userLocation = action.payload;
-    },
-    updateLocations: (state, action) => {
-      state.loading = false;
-      state.locations = action.payload;
-    },
   },
 });
 
@@ -66,8 +59,6 @@ export const {
   logoutSuccess,
   forgotPasswordSuccess,
   onError,
-  updateFavourite,
-  updateUserLoc,
-  updateLocations,
+  allUsersLoadSuccess,
 } = userSlice.actions;
 export default userSlice.reducer;
