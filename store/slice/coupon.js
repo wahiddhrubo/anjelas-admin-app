@@ -3,7 +3,7 @@ const initialState = {
   sucess: false,
   error: {},
   loading: false,
-  coupon: "",
+  coupon: null,
   total: 0,
   discount: 0,
   coupons: [],
@@ -17,6 +17,18 @@ const couponSlice = createSlice({
       state.loading = false;
       state.sucess = true;
     },
+    addCouponSucessHandler: (state, action) => {
+      state.loading = false;
+      state.addCouponSucess = true;
+    },
+    updateCouponSucessHandler: (state, action) => {
+      state.loading = false;
+      state.updateCouponSucess = true;
+    },
+    resetUpdateCouponSucess: (state, action) => {
+      state.loading = false;
+      state.updateCouponSucess = false;
+    },
     allCouponSucess: (state, action) => {
       state.loading = false;
       state.sucess = true;
@@ -26,15 +38,12 @@ const couponSlice = createSlice({
       state.loading = true;
     },
     couponError: (state, action) => {
-      console.log(action.payload);
       state.error = action.payload;
       state.loading = false;
     },
-    updateCoupon: (state, action) => {
+    updateCouponSlice: (state, action) => {
       state.loading = false;
-      // state.coupon = action.payload.coupon;
-      state.total = action.payload.total;
-      state.discount = action.payload.discount;
+      state.coupon = action.payload.coupon;
     },
   },
 });
@@ -43,7 +52,10 @@ export const {
   couponSucess,
   couponLoading,
   couponError,
-  updateCoupon,
+  updateCouponSlice,
   allCouponSucess,
+  addCouponSucessHandler,
+  updateCouponSucessHandler,
+  resetUpdateCouponSucess,
 } = couponSlice.actions;
 export default couponSlice.reducer;

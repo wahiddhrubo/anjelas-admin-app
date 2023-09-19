@@ -28,7 +28,6 @@ export default function Login({}) {
   const dispatch = useDispatch();
   const { user } = useSelector(getUser);
   const loginHandler = () => {
-    console.log("pressed");
     dispatch({ type: LOGIN, email, password });
   };
 

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Keyboard, Pressable, StyleSheet, View } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Coupons from "./coupons";
-import SingleCoupon from "./singleCoupon";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +19,6 @@ export default function CouponTabScreen({ navigation }) {
         }}
       >
         <Tab.Screen name="Coupons" component={Coupons} />
-        <Tab.Screen name="SingleCoupon" component={SingleCoupon} />
       </Tab.Navigator>
     </Pressable>
   );

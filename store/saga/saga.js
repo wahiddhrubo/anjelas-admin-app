@@ -8,6 +8,8 @@ import {
 } from "./handlers/products";
 import {
   ADD_PRODUCT,
+  CREATE_COUPON,
+  DELETE_COUPON,
   DELETE_SINGLE_PRODUCT,
   FORGOT_PASSWORD,
   GET_ALL_COUPON,
@@ -23,6 +25,8 @@ import {
   LOGOUT,
   REGISTER,
   RESET_PASSWORD,
+  UPDATE_COUPON,
+  UPDATE_ORDER_STATUS,
 } from "./actions";
 import {
   forgotPassword,
@@ -34,8 +38,18 @@ import {
   resetPassword,
 } from "./handlers/user";
 
-import { fetchOrders, fetchSingleOrder } from "./handlers/orders";
-import { fetchAllCoupon, fetchCoupon } from "./handlers/coupon";
+import {
+  fetchOrders,
+  fetchSingleOrder,
+  updateOrderStatus,
+} from "./handlers/orders";
+import {
+  createCoupon,
+  deleteCoupon,
+  fetchAllCoupon,
+  fetchCoupon,
+  updateCoupon,
+} from "./handlers/coupon";
 
 export default function* rootSaga() {
   yield takeLatest(GET_HOME_PRODUCTS, fetchHomeProducts);
@@ -52,7 +66,12 @@ export default function* rootSaga() {
   yield takeLatest(LOAD_ALL_USER, getAllUsers);
 
   yield takeLatest(GET_ORDERS, fetchOrders);
+  yield takeLatest(UPDATE_ORDER_STATUS, updateOrderStatus);
   yield takeLatest(GET_SINGLE_ORDERS, fetchSingleOrder);
 
   yield takeLatest(GET_ALL_COUPON, fetchAllCoupon);
+  yield takeLatest(CREATE_COUPON, createCoupon);
+  yield takeLatest(UPDATE_COUPON, updateCoupon);
+  yield takeLatest(DELETE_COUPON, deleteCoupon);
+  yield takeLatest(GET_COUPON, fetchCoupon);
 }

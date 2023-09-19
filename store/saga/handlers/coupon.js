@@ -1,19 +1,22 @@
 import { put, call } from "redux-saga/effects";
 import { axiosCredentialsCall } from "../call";
 import {
+  addCouponSucessHandler,
   allCouponSucess,
   couponError,
   couponLoading,
-  updateCoupon,
+  updateCouponSlice,
+  updateCouponSucessHandler,
 } from "../../slice/coupon";
 import { BACKEND_URL } from "../../../lib/config";
+import { GET_ALL_COUPON } from "../actions";
+import { sucessAlert } from "../../slice/alert";
 
 export function* fetchCoupon(action) {
   yield put(couponLoading());
-  const { code, totalAmount, deliveryCharge } = action;
-  console.log({ code, totalAmount, deliveryCharge });
+  const { id } = action;
   try {
-    const fetchUrl = `${BACKEND_URL}/api/v1/coupon`;
+    const fetchUrl = `${BACKEND_URL}/api/v1/coupon/${id}`;
     const { data } = yield call(() =>
       axiosCredentialsCall({
         url: fetchUrl,
@@ -21,9 +24,8 @@ export function* fetchCoupon(action) {
       })
     );
 
-    const { total, discount } = data;
-    console.log(total, discount);
-    yield put(updateCoupon({ total, discount }));
+    const { coupon } = data;
+    yield put(updateCouponSlice({ coupon }));
   } catch (error) {
     console.log(error);
     yield put(couponError(error.response.data.message || error.message));
@@ -45,6 +47,71 @@ export function* fetchAllCoupon(action) {
     console.log(data);
     const { coupons } = data;
     yield put(allCouponSucess({ coupons }));
+  } catch (error) {
+    console.log(error);
+    yield put(couponError(error.response.data.message || error.message));
+  }
+}
+
+export function* updateCoupon(action) {
+  yield put(couponLoading());
+  const { code, discountType, discount, firstOrder, maxUses, expires, id } =
+    action;
+
+  try {
+    const fetchUrl = `${BACKEND_URL}/api/v1/coupon/update/${id}`;
+    yield call(() =>
+      axiosCredentialsCall({
+        url: fetchUrl,
+        method: "post",
+        data: { code, discountType, discount, firstOrder, maxUses, expires },
+      })
+    );
+
+    yield put(sucessAlert("Coupon Updated Sucessfully"));
+    yield put(updateCouponSucessHandler());
+  } catch (error) {
+    console.log(error);
+    yield put(couponError(error.response.data.message || error.message));
+  }
+}
+export function* createCoupon(action) {
+  yield put(couponLoading());
+  const { code, discountType, discount, firstOrder, maxUses, expires } = action;
+
+  try {
+    const fetchUrl = `${BACKEND_URL}/api/v1/coupon`;
+    yield call(() =>
+      axiosCredentialsCall({
+        url: fetchUrl,
+        method: "post",
+        data: { code, discountType, discount, firstOrder, maxUses, expires },
+      })
+    );
+
+    yield put(sucessAlert("Coupon Added Sucessfully"));
+    yield put(addCouponSucessHandler());
+  } catch (error) {
+    console.log(error);
+    yield put(couponError(error.response.data.message || error.message));
+  }
+}
+
+export function* deleteCoupon(action) {
+  yield put(couponLoading());
+  const { ids } = action;
+  try {
+    const fetchUrl = `${BACKEND_URL}/api/v1/coupon`;
+    yield call(() =>
+      axiosCredentialsCall({
+        url: fetchUrl,
+        method: "delete",
+        data: { ids },
+      })
+    );
+
+    yield put({ type: GET_ALL_COUPON });
+    yield put(sucessAlert("Coupon Deleted Sucessfully"));
   } catch (error) {
     console.log(error);
     yield put(couponError(error.response.data.message || error.message));

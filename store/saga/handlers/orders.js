@@ -4,6 +4,7 @@ import {
   orderLoading,
   orderSucess,
   reviewSucess,
+  updateOrderSucessHandler,
   updateOrders,
 } from "../../slice/order";
 import { put, call, select } from "redux-saga/effects";
@@ -36,6 +37,20 @@ export function* fetchSingleOrder(action) {
     );
     console.log(data);
     yield put(getSingleOrder(data));
+  } catch (error) {
+    yield put(orderError(error.response.data.message || error.message));
+  }
+}
+export function* updateOrderStatus(action) {
+  yield put(orderLoading());
+  const { id, status } = action;
+  try {
+    const fetchUrl = `${BACKEND_URL}/api/v1/user/orders/?id=${id}`;
+    yield call(() =>
+      axiosCredentialsCall({ url: fetchUrl, method: "post", data: { status } })
+    );
+
+    yield put(updateOrderSucessHandler());
   } catch (error) {
     yield put(orderError(error.response.data.message || error.message));
   }

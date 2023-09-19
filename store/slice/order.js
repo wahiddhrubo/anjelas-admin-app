@@ -33,6 +33,11 @@ const orderSlice = createSlice({
       state.loading = false;
       state.order = action.payload.order;
     },
+
+    updateOrderSucessHandler: (state, action) => {
+      state.loading = false;
+      state.updateOrderSucess = true;
+    },
   },
 });
 
@@ -44,5 +49,6 @@ export const {
   orderError,
   reviewSucess,
   resetReview,
+  updateOrderSucessHandler,
 } = orderSlice.actions;
 export default orderSlice.reducer;

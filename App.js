@@ -11,6 +11,8 @@ import Alert from "./components/alert";
 import HomeTabs from "./components/nav/nav";
 import Newitem from "./screens/newitem";
 import UpdateItem from "./screens/updateItem";
+import UpdateCoupon from "./screens/updateCoupon";
+import AddCoupon from "./screens/addCoupon";
 
 const Stack = createStackNavigator();
 
@@ -26,6 +28,8 @@ export default function App() {
           <Stack.Screen component={HomeTabs} name="HomeTabs" />
           <Stack.Screen component={Newitem} name="NewItem" />
           <Stack.Screen component={UpdateItem} name="UpdateItem" />
+          <Stack.Screen name="UpdateCoupon" component={UpdateCoupon} />
+          <Stack.Screen name="NewCoupon" component={AddCoupon} />
         </Stack.Navigator>
       </NavigationContainer>
       <Alert />
