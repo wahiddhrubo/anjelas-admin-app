@@ -21,6 +21,7 @@ import { resetUpdateCouponSucess } from "../store/slice/coupon";
 import DiscountTypeSelector from "../components/addCoupon/discountSelector";
 import CouponUpdateFeaturedImageUploader from "../components/addCoupon/updateFeaturedImageUploader";
 import FirstAndFeaturedOrder from "../components/addCoupon/selectors";
+import DiscountPeriodSelector from "../components/addCoupon/discountPeriodSelector";
 
 export default function UpdateCoupon({ navigation }) {
   const dispatch = useDispatch();
@@ -29,6 +30,8 @@ export default function UpdateCoupon({ navigation }) {
   const { coupon, updateCouponSucess } = useSelector(getCoupon);
 
   const [code, setCode] = useState("");
+  const [day, setDay] = useState();
+  const [period, setPeriod] = useState();
   const [discount, setDiscount] = useState("");
   const [brakingAmount, setBrakingAmount] = useState("");
   const [maxUses, setMaxUses] = useState("");
@@ -66,10 +69,12 @@ export default function UpdateCoupon({ navigation }) {
       setFeaturedImageUri(coupon.featuredImage);
       setFirstOrder(coupon.firstOrder || false);
       setFeaturedOrder(coupon.featuredOrder || false);
+      setPeriod(coupon.timeline?.period);
+      setDay(coupon.timeline?.day);
     }
   }, [coupon]);
 
-  const hasDiscount = !discount || discountType === "zero-delivery";
+  const hasDiscount = discount || discountType === "zero-delivery";
 
   const isDisabled =
     !code || !hasDiscount || !maxUses || !expires || !discountType;
@@ -78,7 +83,7 @@ export default function UpdateCoupon({ navigation }) {
     dispatch({
       type: UPDATE_COUPON,
       code,
-      discount,
+      discount: discount || 0,
       brakingAmount,
       maxUses,
       expires,
@@ -152,6 +157,12 @@ export default function UpdateCoupon({ navigation }) {
                 defaultValue={expires}
               />
             </View>
+            <DiscountPeriodSelector
+              day={day}
+              setDay={setDay}
+              period={period}
+              setPeriod={setPeriod}
+            />
             <FirstAndFeaturedOrder
               featuredOrder={featuredOrder}
               firstOrder={firstOrder}

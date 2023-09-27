@@ -55,17 +55,7 @@ export function* fetchAllCoupon(action) {
 
 export function* updateCoupon(action) {
   yield put(couponLoading());
-  const {
-    code,
-    discountType,
-    discount,
-    firstOrder,
-    maxUses,
-    expires,
-    id,
-    featuredImage,
-    featuredOrder,
-  } = action;
+  const { id, featuredImage } = action;
 
   try {
     console.log(featuredImage);
@@ -74,19 +64,11 @@ export function* updateCoupon(action) {
       axiosCredentialsCall({
         url: fetchUrl,
         method: "post",
-        data: {
-          code,
-          discountType,
-          discount,
-          firstOrder,
-          maxUses,
-          expires,
-          featuredImage,
-          featuredOrder,
-        },
+        data: action,
       })
     );
 
+    yield put({ type: GET_ALL_COUPON });
     yield put(sucessAlert("Coupon Updated Sucessfully"));
     yield put(updateCouponSucessHandler());
   } catch (error) {
@@ -96,16 +78,6 @@ export function* updateCoupon(action) {
 }
 export function* createCoupon(action) {
   yield put(couponLoading());
-  const {
-    code,
-    discountType,
-    discount,
-    firstOrder,
-    maxUses,
-    expires,
-    featuredImage,
-    featuredOrder,
-  } = action;
 
   try {
     const fetchUrl = `${BACKEND_URL}/api/v1/coupon`;
@@ -113,20 +85,12 @@ export function* createCoupon(action) {
       axiosCredentialsCall({
         url: fetchUrl,
         method: "post",
-        data: {
-          code,
-          discountType,
-          discount,
-          firstOrder,
-          maxUses,
-          expires,
-          featuredImage,
-          featuredOrder,
-        },
+        data: action,
       })
     );
 
     yield put(sucessAlert("Coupon Added Sucessfully"));
+    yield put({ type: GET_ALL_COUPON });
     yield put(addCouponSucessHandler());
   } catch (error) {
     console.log(error);

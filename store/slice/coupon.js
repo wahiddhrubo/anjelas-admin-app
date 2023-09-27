@@ -31,7 +31,7 @@ const couponSlice = createSlice({
     },
     resetAddCouponSucess: (state, action) => {
       state.loading = false;
-      state.updateCouponSucess = false;
+      state.addCouponSucess = false;
     },
     allCouponSucess: (state, action) => {
       state.loading = false;

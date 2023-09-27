@@ -40,7 +40,7 @@ export default function CouponFeaturedImageUploader({
             source={{ uri: featuredImageUri.uri }}
             style={styles.image}
             width={350}
-            height={350}
+            height={175}
           >
             <Pressable onPress={() => removeImage(g.uri)} style={styles.icon}>
               <Feather name="x" size={24} color="white" />

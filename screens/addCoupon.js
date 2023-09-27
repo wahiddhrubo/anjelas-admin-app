@@ -21,12 +21,15 @@ import DiscountTypeSelector from "../components/addCoupon/discountSelector";
 import CouponFeaturedImageUploader from "../components/addCoupon/featuredImageUploader";
 import { SingleImageUpload } from "../axios/imageUpload";
 import FirstAndFeaturedOrder from "../components/addCoupon/selectors";
+import DiscountPeriodSelector from "../components/addCoupon/discountPeriodSelector";
 
 export default function AddCoupon({ navigation }) {
   const dispatch = useDispatch();
   const { coupon, addCouponSucess } = useSelector(getCoupon);
 
   const [code, setCode] = useState();
+  const [day, setDay] = useState();
+  const [period, setPeriod] = useState();
   const [discount, setDiscount] = useState();
   const [brakingAmount, setBrakingAmount] = useState();
   const [maxUses, setMaxUses] = useState();
@@ -44,25 +47,34 @@ export default function AddCoupon({ navigation }) {
     }
   }, [addCouponSucess]);
 
-  const hasDiscount = !discount || discountType === "zero-delivery";
+  const hasDiscount = discount || discountType === "zero-delivery";
 
   const isDisabled =
     !code || !hasDiscount || !maxUses || !expires || !discountType;
 
+  console.log(hasDiscount);
   const couponHandler = async () => {
-    const featuredImage = await SingleImageUpload(featuredImageUri);
+    const featuredImage = featuredImageUri
+      ? await SingleImageUpload(featuredImageUri)
+      : null;
 
     dispatch({
       type: CREATE_COUPON,
       code,
-      discount,
+      discount: discount || 0,
       brakingAmount,
       maxUses,
       expires,
       discountType,
-      featuredImage,
+      ...(featuredImage && { featuredImage }),
       featuredOrder,
       firstOrder,
+      ...((day || period) && {
+        timeline: {
+          ...(period && { period }),
+          ...(day && { day }),
+        },
+      }),
     });
   };
 
@@ -125,6 +137,12 @@ export default function AddCoupon({ navigation }) {
             placeholder="Expires"
             value={expires}
             defaultValue={expires}
+          />
+          <DiscountPeriodSelector
+            day={day}
+            setDay={setDay}
+            period={period}
+            setPeriod={setPeriod}
           />
           <FirstAndFeaturedOrder
             featuredOrder={featuredOrder}

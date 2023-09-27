@@ -65,6 +65,7 @@ export default function CouponList({
       month: "long",
       year: "numeric",
     }).format(new Date(dt));
+
   const today = new Date();
   const expiry = new Date(expires);
   const expired = today > expiry;
@@ -118,9 +119,11 @@ export default function CouponList({
           <Text style={styles.price}>
             {`${
               discountType === "percent-discount"
-                ? `${discount}%`
-                : `TK ${discount}`
-            } off`}
+                ? `${discount}% off`
+                : discountType === "zero-delivery"
+                ? `Free Delivery`
+                : `TK ${discount} off`
+            } `}
           </Text>
         </View>
         <Pressable
