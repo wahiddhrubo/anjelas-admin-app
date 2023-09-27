@@ -6,8 +6,9 @@ import { StyleSheet } from "react-native";
 import { View } from "react-native";
 import { Image } from "react-native";
 import { ImageBackground } from "react-native";
+import { SingleImageUpload } from "../../axios/imageUpload";
 
-export default function FeaturedImageUploader({
+export default function CouponUpdateFeaturedImageUploader({
   setFeaturedImageUris,
   featuredImageUri,
 }) {
@@ -21,13 +22,16 @@ export default function FeaturedImageUploader({
     if (permissionStatus.status === "granted") {
       const imgResponse = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
+        // allowsEditing: true,
+        // aspect: [4, 3],
         quality: 1,
       });
-      setFeaturedImageUris(imgResponse.assets[0]);
+      const featuredImage = await SingleImageUpload(imgResponse.assets[0]);
+      console.log({ featuredImage });
+      setFeaturedImageUris(featuredImage);
     }
   };
+  console.log(featuredImageUri);
   return (
     <>
       <Pressable onPress={imageSelectAndUploader} style={styles.imageSelector}>
@@ -37,7 +41,7 @@ export default function FeaturedImageUploader({
       {featuredImageUri ? (
         <View style={styles.imageBox}>
           <ImageBackground
-            source={{ uri: featuredImageUri }}
+            source={{ uri: featuredImageUri.url }}
             style={styles.image}
             width={350}
             height={350}

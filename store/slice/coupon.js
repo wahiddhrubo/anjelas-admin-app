@@ -29,6 +29,10 @@ const couponSlice = createSlice({
       state.loading = false;
       state.updateCouponSucess = false;
     },
+    resetAddCouponSucess: (state, action) => {
+      state.loading = false;
+      state.updateCouponSucess = false;
+    },
     allCouponSucess: (state, action) => {
       state.loading = false;
       state.sucess = true;
@@ -57,5 +61,6 @@ export const {
   addCouponSucessHandler,
   updateCouponSucessHandler,
   resetUpdateCouponSucess,
+  resetAddCouponSucess,
 } = couponSlice.actions;
 export default couponSlice.reducer;

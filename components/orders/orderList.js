@@ -6,6 +6,9 @@ import { useNavigation } from "@react-navigation/native";
 import { primaryColor } from "../../lib/constant";
 import { Modal } from "react-native";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { UPDATE_ORDER_STATUS } from "../../store/saga/actions";
+import { updateOrderStatus } from "../../store/saga/handlers/orders";
 
 export default function OrderList({ id, status, items, time, total, _id }) {
   const statusColor = {
@@ -15,17 +18,22 @@ export default function OrderList({ id, status, items, time, total, _id }) {
   };
   const statuses = ["processing", "delivering", "delivered"];
 
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const dateString = time.split("T")[0].replace(/-/g, " ");
   const copyHandler = async () => await Clipboard.setStringAsync(id);
   const [openModal, setOpenModal] = useState(false);
+  const updatedStatusHandler = (status) => {
+    dispatch({ type: UPDATE_ORDER_STATUS, id, status });
+    setOpenModal(false);
+  };
   return (
     <View style={style.container}>
       <Modal visible={openModal}>
         <Pressable onPress={() => setOpenModal(false)} style={style.modalStyle}>
           <View>
             {statuses.map((s) => (
-              <Pressable>
+              <Pressable onPress={() => updatedStatusHandler(s)}>
                 <Text key={s} style={style.modalopts}>
                   {s}
                 </Text>

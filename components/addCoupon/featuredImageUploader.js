@@ -7,7 +7,7 @@ import { View } from "react-native";
 import { Image } from "react-native";
 import { ImageBackground } from "react-native";
 
-export default function FeaturedImageUploader({
+export default function CouponFeaturedImageUploader({
   setFeaturedImageUris,
   featuredImageUri,
 }) {
@@ -21,8 +21,8 @@ export default function FeaturedImageUploader({
     if (permissionStatus.status === "granted") {
       const imgResponse = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
+        // allowsEditing: true,
+        // aspect: [4, 3],
         quality: 1,
       });
       setFeaturedImageUris(imgResponse.assets[0]);
@@ -37,7 +37,7 @@ export default function FeaturedImageUploader({
       {featuredImageUri ? (
         <View style={styles.imageBox}>
           <ImageBackground
-            source={{ uri: featuredImageUri }}
+            source={{ uri: featuredImageUri.uri }}
             style={styles.image}
             width={350}
             height={350}

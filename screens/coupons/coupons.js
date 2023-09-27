@@ -8,6 +8,7 @@ import StickyHeader from "../../components/stickyHeader";
 import { Pressable } from "react-native";
 import { StyleSheet } from "react-native";
 import { Text } from "react-native";
+import { ScrollView } from "react-native";
 
 export default function Coupons({ navigation }) {
   const dispatch = useDispatch();
@@ -20,18 +21,17 @@ export default function Coupons({ navigation }) {
     <View>
       <StickyHeader title={"Coupons"} />
       <View style={styles.container}>
-        <FlatList
-          data={coupons}
-          style={{ marginBottom: 150 }}
-          StickyHeaderComponent={() => (
-            <Pressable
-              style={styles.btn}
-              onPress={() => navigation.navigate("NewCoupon")}
-            >
-              <Text style={styles.btnText}>Create New Item</Text>
-            </Pressable>
-          )}
-          renderItem={({ item }) => (
+        <Pressable
+          style={styles.btn}
+          onPress={() => navigation.navigate("NewCoupon")}
+        >
+          <Text style={styles.btnText}>Add New Coupon</Text>
+        </Pressable>
+        <Pressable style={styles.btn}>
+          <Text style={styles.btnText}>Search A Coupon</Text>
+        </Pressable>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {coupons?.map((item) => (
             <CouponList
               brakingAmount={item.brakingAmount}
               code={item.code}
@@ -44,8 +44,11 @@ export default function Coupons({ navigation }) {
               totalUses={item.totalUses}
               key={item._id}
             />
-          )}
-        />
+          ))}
+          <View style={{ height: 400 }}></View>
+        </ScrollView>
+
+        <View style={{ height: 0 }}></View>
       </View>
     </View>
   );
@@ -63,6 +66,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "white",
   },
+  btn: {
+    backgroundColor: "purple",
+    width: "100%",
+    padding: 8,
+    marginVertical: 4,
+  },
+
   container: {
     paddingHorizontal: 20,
     paddingVertical: 24,

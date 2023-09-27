@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { DELETE_SINGLE_PRODUCT } from "../../store/saga/actions";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 
 export default function ItemList({ id, prices, name, categories, tags, img }) {
   const navigation = useNavigation();

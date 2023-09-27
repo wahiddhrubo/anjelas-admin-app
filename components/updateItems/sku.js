@@ -22,7 +22,7 @@ export default function Sku({ skus, setSkus, id }) {
   useEffect(() => {
     if (currentSku) {
       setName(currentSku.name);
-      setPrice(currentSku.price);
+      setPrice(currentSku.price.toString());
       setServing(currentSku.serving);
     }
   }, [currentSku]);
@@ -31,7 +31,7 @@ export default function Sku({ skus, setSkus, id }) {
     const filtered = skus.filter((s) => s.sku !== id);
     setSkus(filtered);
   };
-  const disabled = [name, price, serving];
+  const disabled = [name, price, serving].includes("");
   console.log(disabled);
   return (
     <Pressable onPress={() => setIsOpen(!isOpen && true)}>

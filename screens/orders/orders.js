@@ -31,6 +31,7 @@ export default function Orders() {
             total={parseInt(item.total)}
           />
         )}
+        keyExtractor={(item) => item._id}
       />
     </View>
   );

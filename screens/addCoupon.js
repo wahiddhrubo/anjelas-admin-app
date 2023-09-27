@@ -18,6 +18,9 @@ import StickyHeader from "../components/stickyHeader";
 import { primaryColor } from "../lib/constant";
 import { resetAddCouponSucess } from "../store/slice/coupon";
 import DiscountTypeSelector from "../components/addCoupon/discountSelector";
+import CouponFeaturedImageUploader from "../components/addCoupon/featuredImageUploader";
+import { SingleImageUpload } from "../axios/imageUpload";
+import FirstAndFeaturedOrder from "../components/addCoupon/selectors";
 
 export default function AddCoupon({ navigation }) {
   const dispatch = useDispatch();
@@ -29,6 +32,9 @@ export default function AddCoupon({ navigation }) {
   const [maxUses, setMaxUses] = useState();
   const [expires, setExpires] = useState();
   const [discountType, setDiscountType] = useState();
+  const [firstOrder, setFirstOrder] = useState(false);
+  const [featuredOrder, setFeaturedOrder] = useState(false);
+  const [featuredImageUri, setFeaturedImageUri] = useState();
   const [discountModal, setDiscountModal] = useState(false);
 
   useEffect(() => {
@@ -37,17 +43,15 @@ export default function AddCoupon({ navigation }) {
       navigation.navigate("Coupons");
     }
   }, [addCouponSucess]);
-  console.log(coupon);
+
+  const hasDiscount = !discount || discountType === "zero-delivery";
 
   const isDisabled =
-    !code ||
-    !discount ||
-    !brakingAmount ||
-    !maxUses ||
-    !expires ||
-    !discountType;
+    !code || !hasDiscount || !maxUses || !expires || !discountType;
 
   const couponHandler = async () => {
+    const featuredImage = await SingleImageUpload(featuredImageUri);
+
     dispatch({
       type: CREATE_COUPON,
       code,
@@ -56,9 +60,12 @@ export default function AddCoupon({ navigation }) {
       maxUses,
       expires,
       discountType,
+      featuredImage,
+      featuredOrder,
+      firstOrder,
     });
   };
-  console.log(discountModal);
+
   return (
     <>
       <StickyHeader title={`Create Coupon`} />
@@ -118,6 +125,16 @@ export default function AddCoupon({ navigation }) {
             placeholder="Expires"
             value={expires}
             defaultValue={expires}
+          />
+          <FirstAndFeaturedOrder
+            featuredOrder={featuredOrder}
+            firstOrder={firstOrder}
+            setFeaturedOrder={setFeaturedOrder}
+            setFirstOrder={setFirstOrder}
+          />
+          <CouponFeaturedImageUploader
+            featuredImageUri={featuredImageUri}
+            setFeaturedImageUris={setFeaturedImageUri}
           />
         </View>
       </ScrollView>

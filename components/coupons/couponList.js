@@ -54,7 +54,7 @@ export default function CouponList({
 
   useEffect(() => {
     if (deleteCoupon) {
-      dispatch({ type: DELETE_COUPON, id });
+      dispatch({ type: DELETE_COUPON, ids: [id] });
     }
   }, [deleteCoupon]);
   const dateFormatter = (dt) =>
@@ -69,7 +69,7 @@ export default function CouponList({
   const expiry = new Date(expires);
   const expired = today > expiry;
   const deleteCouponPermission = () =>
-    Alert.alert(`Delete Coupon`, `${name} Will Be Deleted!!!`, [
+    Alert.alert(`Delete Coupon`, `${code} Will Be Deleted!!!`, [
       {
         text: "Cancel",
         style: "cancel",

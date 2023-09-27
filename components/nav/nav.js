@@ -12,12 +12,12 @@ const HomeTabs = ({ navigation }) => {
   useEffect(() => {
     dispatch({ type: LOAD_USER });
   }, []);
-  // useEffect(() => {
-  //   if (user) {
-  //     return;
-  //   }
-  //   navigation.navigate("Login");
-  // }, [user]);
+  useEffect(() => {
+    if (user) {
+      return;
+    }
+    navigation.navigate("Login");
+  }, [user]);
 
   return <BottomNavbar navigation={navigation} />;
 };

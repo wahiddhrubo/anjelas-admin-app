@@ -19,6 +19,8 @@ import StickyHeader from "../components/stickyHeader";
 import { primaryColor } from "../lib/constant";
 import { resetUpdateCouponSucess } from "../store/slice/coupon";
 import DiscountTypeSelector from "../components/addCoupon/discountSelector";
+import CouponUpdateFeaturedImageUploader from "../components/addCoupon/updateFeaturedImageUploader";
+import FirstAndFeaturedOrder from "../components/addCoupon/selectors";
 
 export default function UpdateCoupon({ navigation }) {
   const dispatch = useDispatch();
@@ -26,14 +28,16 @@ export default function UpdateCoupon({ navigation }) {
   const { id } = router.params;
   const { coupon, updateCouponSucess } = useSelector(getCoupon);
 
-  const [code, setCode] = useState();
-  const [discount, setDiscount] = useState();
-  const [brakingAmount, setBrakingAmount] = useState();
-  const [maxUses, setMaxUses] = useState();
-  const [expires, setExpires] = useState();
-  const [discountType, setDiscountType] = useState();
+  const [code, setCode] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [brakingAmount, setBrakingAmount] = useState("");
+  const [maxUses, setMaxUses] = useState("");
+  const [expires, setExpires] = useState("");
+  const [featuredImageUri, setFeaturedImageUri] = useState("");
+  const [discountType, setDiscountType] = useState("");
   const [discountModal, setDiscountModal] = useState(false);
-  console.log(discountModal);
+  const [firstOrder, setFirstOrder] = useState(false);
+  const [featuredOrder, setFeaturedOrder] = useState(false);
 
   useEffect(() => {
     if (updateCouponSucess) {
@@ -41,11 +45,11 @@ export default function UpdateCoupon({ navigation }) {
       navigation.navigate("Coupons");
     }
   }, [updateCouponSucess]);
-  console.log(coupon);
 
   useEffect(() => {
     dispatch({ type: GET_COUPON, id });
   }, [id]);
+
   useEffect(() => {
     if (coupon) {
       setCode(coupon?.code);
@@ -59,16 +63,16 @@ export default function UpdateCoupon({ navigation }) {
       console.log(diffTime);
       setExpires(diffTime >= 1 ? diffDays.toString() : "0");
       setDiscountType(coupon?.discountType);
+      setFeaturedImageUri(coupon.featuredImage);
+      setFirstOrder(coupon.firstOrder || false);
+      setFeaturedOrder(coupon.featuredOrder || false);
     }
   }, [coupon]);
 
+  const hasDiscount = !discount || discountType === "zero-delivery";
+
   const isDisabled =
-    !code ||
-    !discount ||
-    !brakingAmount ||
-    !maxUses ||
-    !expires ||
-    !discountType;
+    !code || !hasDiscount || !maxUses || !expires || !discountType;
 
   const couponHandler = async () => {
     dispatch({
@@ -79,8 +83,12 @@ export default function UpdateCoupon({ navigation }) {
       maxUses,
       expires,
       discountType,
+      id,
+      featuredOrder,
+      firstOrder,
     });
   };
+
   return (
     <>
       {coupon ? (
@@ -116,7 +124,7 @@ export default function UpdateCoupon({ navigation }) {
                 style={styles.inputHalf}
                 keyboardType="number-pad"
                 placeholder="Discount"
-                value={discount}
+                value={discount.toString()}
                 defaultValue={discount}
               />
               <TextInput
@@ -124,7 +132,7 @@ export default function UpdateCoupon({ navigation }) {
                 style={styles.inputHalf}
                 keyboardType="number-pad"
                 placeholder="BrakingAmount"
-                value={brakingAmount}
+                value={brakingAmount.toString()}
                 defaultValue={brakingAmount}
               />
               <TextInput
@@ -132,7 +140,7 @@ export default function UpdateCoupon({ navigation }) {
                 style={styles.inputHalf}
                 keyboardType="number-pad"
                 placeholder="MaxUses"
-                value={maxUses}
+                value={maxUses.toString()}
                 defaultValue={maxUses}
               />
               <TextInput
@@ -140,10 +148,20 @@ export default function UpdateCoupon({ navigation }) {
                 style={styles.inputHalf}
                 keyboardType="number-pad"
                 placeholder="Expires"
-                value={expires}
+                value={expires.toString()}
                 defaultValue={expires}
               />
             </View>
+            <FirstAndFeaturedOrder
+              featuredOrder={featuredOrder}
+              firstOrder={firstOrder}
+              setFeaturedOrder={setFeaturedOrder}
+              setFirstOrder={setFirstOrder}
+            />
+            <CouponUpdateFeaturedImageUploader
+              featuredImageUri={featuredImageUri}
+              setFeaturedImageUris={setFeaturedImageUri}
+            />
           </ScrollView>
           <Pressable
             style={

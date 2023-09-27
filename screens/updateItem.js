@@ -62,7 +62,7 @@ export default function UpdateItem({ navigation }) {
     if (item) {
       setName(item?.name);
       setDescription(item?.description);
-      setStock(item.stock);
+      setStock(item.stock.toString());
       setCategory(item?.categories);
       setFeaturedImageUri(item?.featuredImage.url);
       setGalleryImageUris(item?.gallery || []);
@@ -91,20 +91,17 @@ export default function UpdateItem({ navigation }) {
     !galleryImageUris.length;
 
   const itemHandler = async () => {
-    const featuredImage = await SingleImageUpload(featuredImageUri);
-    const gallery = await galleryImageUpload(galleryImageUris);
     dispatch({
       type: ADD_PRODUCT,
       name,
       description,
       stock,
-      gallery,
-      featuredImage,
+      gallery: galleryImageUris,
+      featuredImage: featuredImageUri,
       categories: category,
       skus,
     });
   };
-  console.log(stock);
   return (
     <>
       {item ? (

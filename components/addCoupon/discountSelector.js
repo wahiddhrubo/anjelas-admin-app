@@ -13,7 +13,7 @@ export default function DiscountTypeSelector({
   setDiscountType,
   modal,
 }) {
-  const discountTypes = ["Flat Discount", "Percent Discount"];
+  const discountTypes = ["Flat Discount", "Percent Discount", "Zero Delivery"];
 
   return (
     <Pressable style={styles.container} onPress={() => setModal(true)}>

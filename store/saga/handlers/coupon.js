@@ -55,16 +55,35 @@ export function* fetchAllCoupon(action) {
 
 export function* updateCoupon(action) {
   yield put(couponLoading());
-  const { code, discountType, discount, firstOrder, maxUses, expires, id } =
-    action;
+  const {
+    code,
+    discountType,
+    discount,
+    firstOrder,
+    maxUses,
+    expires,
+    id,
+    featuredImage,
+    featuredOrder,
+  } = action;
 
   try {
+    console.log(featuredImage);
     const fetchUrl = `${BACKEND_URL}/api/v1/coupon/update/${id}`;
     yield call(() =>
       axiosCredentialsCall({
         url: fetchUrl,
         method: "post",
-        data: { code, discountType, discount, firstOrder, maxUses, expires },
+        data: {
+          code,
+          discountType,
+          discount,
+          firstOrder,
+          maxUses,
+          expires,
+          featuredImage,
+          featuredOrder,
+        },
       })
     );
 
@@ -77,7 +96,16 @@ export function* updateCoupon(action) {
 }
 export function* createCoupon(action) {
   yield put(couponLoading());
-  const { code, discountType, discount, firstOrder, maxUses, expires } = action;
+  const {
+    code,
+    discountType,
+    discount,
+    firstOrder,
+    maxUses,
+    expires,
+    featuredImage,
+    featuredOrder,
+  } = action;
 
   try {
     const fetchUrl = `${BACKEND_URL}/api/v1/coupon`;
@@ -85,7 +113,16 @@ export function* createCoupon(action) {
       axiosCredentialsCall({
         url: fetchUrl,
         method: "post",
-        data: { code, discountType, discount, firstOrder, maxUses, expires },
+        data: {
+          code,
+          discountType,
+          discount,
+          firstOrder,
+          maxUses,
+          expires,
+          featuredImage,
+          featuredOrder,
+        },
       })
     );
 
